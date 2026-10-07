@@ -1,6 +1,9 @@
 import re
 from pathlib import Path
 
+
+SPCL_TOKENS = ["<|endoftext|>", "<|unk|>"]
+
 def build_simple_vocab(text: str) -> dict:
     PATTERN = re.compile(r'(--|[^a-zA-Z0-9\s]|\s)')
     tokens = [t for t in PATTERN.split(text) if t] # split based on the pattern and filter out empty tokens
@@ -10,14 +13,12 @@ def build_simple_vocab(text: str) -> dict:
 # add `<|endoftext|>` and `<|unk|>` tokens to the vocabulary
 def build_simple_vocab_v2(text: str) -> dict:
     PATTERN = re.compile(r'(--|[^a-zA-Z0-9\s]|\s)')
-    SPCL_TOKENS = ["<|endoftext|>", "<|unk|>"]
+    
 
     tokens = [t for t in PATTERN.split(text) if t]
     unique_tokens = sorted(set(tokens))
     unique_tokens.extend(SPCL_TOKENS)
     return {token: i for i, token in enumerate(unique_tokens)}
-
-
 
 
 # build vocabulary once from the text file and reuse it in both SimpleTokenizerV1 and SimpleTokenizerV2
